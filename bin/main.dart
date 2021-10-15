@@ -1,4 +1,6 @@
 import 'package:http/http.dart' as http;
+import 'models/consult.dart';
+import 'models/doctor.dart';
 import 'models/patient.dart';
 import 'utils/utils.dart';
 import 'controller/controller.dart';
@@ -29,10 +31,17 @@ void main(List<String> arguments) async {
             : 'Error al añadir el cliente');
         break;
       case '2':
+        await showConsults();
+        stdout.write('Escoge la consulta a liberar: ');
+        int consult_id = lectorInt();
+        print(await releaseConsultByID(consult_id)
+            ? 'Consulta liberada con exito'
+            : 'Error al liberar la consulta');
         break;
       case '3':
         break;
       case '4':
+        await showConsults();
         break;
       case '5':
         print('Hasta la próxima');
@@ -59,6 +68,12 @@ void main(List<String> arguments) async {
   }); */
 }
 
+Future<bool> releaseConsultByID(int consult_id) async {
+  var list_consult = await Controller.getConsults();
+  return await Controller.releaseConsult(
+      list_consult!.elementAt((consult_id - 1)).id!);
+}
+
 Future<bool> admisionCliente() async {
   String? dni, name, surnames, sympton;
 
@@ -80,4 +95,26 @@ Future<bool> admisionCliente() async {
       surnames: surnames,
       sympton: sympton,
       historyNumber: await Controller.getHistoryNumber()));
+}
+
+Future<void> showConsults() async {
+  List<Consult>? consults = await Controller.getConsults();
+  if (consults != null) {
+    for (var i = 0; i < consults.length; i++) {
+      Consult c = consults.elementAt(i);
+      Doctor? d = await Controller.getDoctorByID(c.id_doctor!);
+
+      print('''
+******Consulta: ${i + 1}******
+Nombre de el médico:${d!.name}
+Especialidad: ${d.specialty}
+Paciente:
+      ''');
+    }
+  } else
+    print('Consultas no disponibles');
+}
+
+int lectorInt() {
+  return int.parse(stdin.readLineSync() as String);
 }

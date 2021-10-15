@@ -46,34 +46,62 @@ class Controller {
     return tempID;
   }
 
-  static Future<Response> getConsults() async =>
-      await Services.get(urlConsults);
+  static Future<List<Consult>?> getConsults() async {
+    var res = await Services.get(urlConsults);
+    return consultResponseProviderFromJson(res.body).consults;
+  }
 
   //El siguiente método no se usa, lo hizo el pendejo de Flavio
   static Future<bool> addConsult(Consult consult) async =>
       Services.post(consult.toJson(), urlConsults);
 
-  static void releaseConsult() {}
+  static Future<bool> releaseConsult(String id_consult) async {
+    late bool res;
 
-  static Future<Response> getDoctors() async => await Services.get(urlDoctors);
+    final url =
+        'https://primer-proyecto-c8a1a-default-rtdb.europe-west1.firebasedatabase.app/consults/$id_consult.json';
+
+    var consults = await getConsults();
+    if (consults != null) {
+      for (var consult in consults) {
+        if (consult.id == id_consult) {
+          consult.id_doctor = '';
+          consult.id_patient = '';
+          consult.isBusy = false;
+
+          res = await Services.put(consult.toJson(), url);
+        }
+      }
+    }
+
+    return res;
+  }
+
+  static Future<List<Doctor>?> getDoctors() async {
+    var res = await Services.get(urlDoctors);
+    return doctorResponseProviderFromJson(res.body).doctors;
+  }
 
   static Future<Doctor?> areDoctorsAvailable() async {
-    var resDoctors = await getDoctors();
-    var resConsults = await getConsults();
-    // ignore: omit_local_variable_types
-    List<Doctor>? doctors =
-        doctorResponseProviderFromJson(resDoctors.body).doctors;
+    var doctors = await getDoctors();
+    var consults = await getConsults();
 
-    // ignore: omit_local_variable_types
-    List<Consult>? consults =
-        consultResponseProviderFromJson(resConsults.body).consults;
+    if (consults != null && doctors != null) {
+      for (Consult consult in consults) {
+        for (Doctor doctor in doctors) {
+          if (consult.id_doctor != doctor.id) return doctor;
+        }
 
-    for (Consult consult in consults!) {
-      for (Doctor doctor in doctors!) {
-        if (consult.id_doctor == doctor.id) return doctor;
+        return null;
       }
+    }
+  }
 
-      return null;
+  static Future<Doctor?> getDoctorByID(String id) async {
+    List<Doctor>? doctors = await getDoctors();
+
+    for (Doctor d in doctors!) {
+      if (id == d.id) return d;
     }
   }
 }
