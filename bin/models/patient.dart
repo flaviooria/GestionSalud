@@ -20,7 +20,7 @@ class Patient {
       name: parsedJson['name'] ?? 'Sin datos',
       surnames: parsedJson['surnames'] ?? 'Sin datos',
       sympton: parsedJson['sympton'] ?? 'Sin datos',
-      historyNumber: parsedJson['historyNumber'] ?? -1);
+      historyNumber: parsedJson['history_number'] ?? -1);
 
   Map<String, dynamic> toJson() => {
         'dni': dni,

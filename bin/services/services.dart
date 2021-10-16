@@ -13,13 +13,14 @@ class Services {
       await http.get(Uri.parse(url));
 
   static Future<bool> delete(String url) async {
-    var res = await http.delete(Uri.parse(url));
+    http.Response res = await http.delete(Uri.parse(url));
     return res.statusCode == 200;
   }
 
   static Future<bool> put(Map<String, dynamic> parsedObject, String url) async {
     final endpoint = Uri.parse(url);
-    var res = await http.put(endpoint, body: jsonEncode(parsedObject));
+    http.Response res =
+        await http.put(endpoint, body: jsonEncode(parsedObject));
     return res.statusCode == 200;
   }
 }

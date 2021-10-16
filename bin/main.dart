@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'models/consult.dart';
 import 'models/doctor.dart';
 import 'models/patient.dart';
+import 'models/waiting_list.dart';
 import 'utils/utils.dart';
 import 'controller/controller.dart';
 import 'dart:io';
@@ -14,7 +15,7 @@ void main(List<String> arguments) async {
   print('Bienvenido al centro de salud de Martos');
   Utils.separationLine();
 
-  var flag = false;
+  bool flag = false;
   do {
     print('''
     1. Admisión de un cliente
@@ -39,6 +40,7 @@ void main(List<String> arguments) async {
             : 'Error al liberar la consulta');
         break;
       case '3':
+        await seeWaitingQueue();
         break;
       case '4':
         await showConsults();
@@ -68,8 +70,24 @@ void main(List<String> arguments) async {
   }); */
 }
 
+Future<void> seeWaitingQueue() async {
+  List<WaitingList>? w_patients = await Controller.getWaitingList();
+  for (var i = 0; i < w_patients!.length; i++) {
+    WaitingList w_list = w_patients.elementAt(i);
+    Patient? p_temp = await Controller.getPatientByID(w_list.id_patient!);
+
+    print('''
+===Paciente ${i + 1} en la cola===
+*** Datos  de paciente ***
+Nombre del paciente: ${p_temp!.name} ${p_temp.surnames}
+Historia de el paciente: ${p_temp.historyNumber}
+Sintomas del paciente: ${p_temp.sympton}
+    ''');
+  }
+}
+
 Future<bool> releaseConsultByID(int consult_id) async {
-  var list_consult = await Controller.getConsults();
+  List<Consult>? list_consult = await Controller.getConsults();
   return await Controller.releaseConsult(
       list_consult!.elementAt((consult_id - 1)).id!);
 }
@@ -111,8 +129,9 @@ Especialidad: ${d.specialty}
 Paciente:
       ''');
     }
-  } else
+  } else {
     print('Consultas no disponibles');
+  }
 }
 
 int lectorInt() {
