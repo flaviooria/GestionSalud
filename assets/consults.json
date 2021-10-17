@@ -1,0 +1,13 @@
+{
+  "-Mm--wo7JbC0BGJvJWJU": {
+    "id_doctor": "-MlvNsfHG4qYviDkTOvg",
+    "id_patient": "-MmE7ggyJ2yrBFwV77Rj",
+    "isBusy": true
+  },
+  "-MmEBXaVttdaNjWZrH1b": {
+    "id_doctor": "",
+    "id_patient": "",
+    "isBusy": false
+  },
+  "-MmEBY6DrUTcM5w6nB0r": { "id_doctor": "", "id_patient": "", "isBusy": false }
+}
