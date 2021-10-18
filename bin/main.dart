@@ -7,17 +7,43 @@ import 'controller/controller.dart';
 import 'dart:io';
 
 void main(List<String> arguments) async {
-  print('Bienvenido al centro de salud de Martos');
+  print('''
+  
+  sSSs. d sss   d s  b sss sssss d ss.    sSSSs          sss. d s.   d      d       b d ss         d s   sb d s.   d ss.  sss sssss   sSSSs     sss.      
+ S      S       S  S S     S     S    b  S     S       d      S  ~O  S      S       S S   ~o       S  S S S S  ~O  S    b     S      S     S  d           
+S       S       S   SS     S     S    P S       S      Y      S   `b S      S       S S     b      S   S  S S   `b S    P     S     S       S Y           
+S       S sSSs  S    S     S     S sS'  S       S        ss.  S sSSO S      S       S S     S      S      S S sSSO S sS'      S     S       S   ss.       
+S       S       S    S     S     S   S  S       S           b S    O S      S       S S     P      S      S S    O S   S      S     S       S      b      
+ S      S       S    S     S     S    S  S     S            P S    O S       S     S  S    S       S      S S    O S    S     S      S     S       P      
+  "sss' P sSSss P    P     P     P    P   "sss"        ` ss'  P    P P sSSs   "sss"   P ss"        P      P P    P P    P     P       "sss"   ` ss'                                                                                        
+  ''');
   Utils.separationLine();
 
   bool flag = false;
   do {
+    List<Consult>? cs_for_cont = await Controller.getConsults();
+    List<WaitingList>? wl_for_cont = await Controller.getWaitingList();
     print('''
-    1. Admisión de un cliente
-    2. Liberar una consulta
-    3. Ver la cola de espera
-    4. Ver el estado actual de las consultas
-    5. Salir
+    El número actual de médicos pasando consulta es: ${cs_for_cont!.where((c) => c.isBusy!).length}
+    Consultas libres: ${cs_for_cont.where((c) => !c.isBusy!).length}
+    Actualmente, tenemos ${wl_for_cont!.length} pacientes en cola
+    Hoy hemos curado a ${Controller.cured_cont} pacientes
+    ==================================================
+        ________________________
+    1. | Admisión de un cliente |
+        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+        ________________________
+    2. |  Liberar una consulta  |
+        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+        ________________________
+    3. |  Ver la cola de espera |
+        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+        _______________________________________
+    4. | Ver el estado actual de las consultas |
+        ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ 
+        _________
+    5. |  Salir  |
+        ¯¯¯¯¯¯¯¯¯
     Elige una opción:
     ''');
     switch (stdin.readLineSync()) {

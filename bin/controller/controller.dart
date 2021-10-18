@@ -13,6 +13,8 @@ import '../providers/waiting_list_provider.dart';
 import '../services/services.dart';
 
 class Controller {
+  static int cured_cont = 0;
+
   static String url_patients =
       'https://primer-proyecto-c8a1a-default-rtdb.europe-west1.firebasedatabase.app/patients.json';
 
@@ -139,6 +141,7 @@ class Controller {
             //Actualizo los nuevos valores a la consulta y la cambio a consulta a estado libre
             is_updated_to_free_state =
                 await Services.put(consult.toJson(), url);
+            if (is_updated_to_free_state) cured_cont += 1;
           }
         }
       }
