@@ -8,8 +8,8 @@ class Consult {
 
   factory Consult.fromJson(parsedJson, [String? id_consult]) => Consult(
       id: id_consult,
-      id_doctor: parsedJson['doctor'] ?? -1,
-      id_patient: parsedJson['patient'] ?? -1,
+      id_doctor: parsedJson['id_doctor'] ?? 'Sin datos',
+      id_patient: parsedJson['id_patient'] ?? 'Sin datos',
       isBusy: parsedJson['isBusy'] ?? false);
 
   Map<String, dynamic> toJson() =>

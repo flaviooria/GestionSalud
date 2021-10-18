@@ -1,9 +1,7 @@
 import '../controller/controller.dart';
-import '../providers/consult_provider.dart';
 
 void main(List<String> args) async {
-  var res = await Controller.getConsults();
-  var consults = consultResponseProviderFromJson(res.body).consults;
+  var res = await Controller.getWaitingList();
 
-  print(consults?[0].id_doctor);
+  print(res);
 }

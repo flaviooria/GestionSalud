@@ -18,9 +18,6 @@ class DoctorResponseProvider {
         .toList();
   }
 
-  Doctor getDoctorByID(parsedJson, String id) =>
-      Doctor.fromJson(parsedJson[id]);
-
   Map<String, dynamic> toJson() => {
         'doctors': List<dynamic>.from(doctors!.map((doctor) => doctor.toJson()))
       };

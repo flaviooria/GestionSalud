@@ -4,7 +4,7 @@ class Patient {
   String? name;
   String? surnames;
   String? sympton;
-  int? historyNumber;
+  int? history_number;
 
   Patient(
       {this.id,
@@ -12,7 +12,7 @@ class Patient {
       this.name,
       this.surnames,
       this.sympton,
-      this.historyNumber});
+      this.history_number});
 
   factory Patient.fromJson(parsedJson, [String? id]) => Patient(
       id: id,
@@ -20,13 +20,13 @@ class Patient {
       name: parsedJson['name'] ?? 'Sin datos',
       surnames: parsedJson['surnames'] ?? 'Sin datos',
       sympton: parsedJson['sympton'] ?? 'Sin datos',
-      historyNumber: parsedJson['historyNumber'] ?? -1);
+      history_number: parsedJson['history_number'] ?? -1);
 
   Map<String, dynamic> toJson() => {
         'dni': dni,
         'name': name,
         'surnames': surnames,
         'sympton': sympton,
-        'historyNumber': historyNumber
+        'history_number': history_number
       };
 }
